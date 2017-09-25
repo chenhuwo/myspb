@@ -31,7 +31,6 @@ public class SpbApplication {
 		sa.run(args);
 	}
 	
-	
 	/*public ApiInfo apiInfo(){
 		return new ApiInfoBuilder()
                 .title("Spring Boot中使用Swagger2构建RESTful APIs")
