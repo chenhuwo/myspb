@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chw.spb.system.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="com.chw.spb.system.entity.User">
+    <result column="ID" jdbcType="INTEGER" property="id" />
+    <result column="LOGIN_NAME" jdbcType="VARCHAR" property="loginName" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="PASSWORD" jdbcType="VARCHAR" property="password" />
+    <result column="SALT" jdbcType="VARCHAR" property="salt" />
+    <result column="BIRTHDAY" jdbcType="TIMESTAMP" property="birthday" />
+    <result column="GENDER" jdbcType="SMALLINT" property="gender" />
+    <result column="EMAIL" jdbcType="VARCHAR" property="email" />
+    <result column="PHONE" jdbcType="VARCHAR" property="phone" />
+    <result column="ICON" jdbcType="VARCHAR" property="icon" />
+    <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="STATE" jdbcType="CHAR" property="state" />
+    <result column="DESCRIPTION" jdbcType="VARCHAR" property="description" />
+    <result column="LOGIN_COUNT" jdbcType="INTEGER" property="loginCount" />
+    <result column="PREVIOUS_VISIT" jdbcType="TIMESTAMP" property="previousVisit" />
+    <result column="LAST_VISIT" jdbcType="TIMESTAMP" property="lastVisit" />
+    <result column="DEL_FLAG" jdbcType="VARCHAR" property="delFlag" />
+  </resultMap>
+  <insert id="insert" parameterType="com.chw.spb.system.entity.User">
+    insert into sb_user (ID, LOGIN_NAME, NAME, 
+      PASSWORD, SALT, BIRTHDAY, 
+      GENDER, EMAIL, PHONE, 
+      ICON, CREATE_DATE, STATE, 
+      DESCRIPTION, LOGIN_COUNT, PREVIOUS_VISIT, 
+      LAST_VISIT, DEL_FLAG)
+    values (#{id,jdbcType=INTEGER}, #{loginName,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{password,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR}, #{birthday,jdbcType=TIMESTAMP}, 
+      #{gender,jdbcType=SMALLINT}, #{email,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{icon,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{state,jdbcType=CHAR}, 
+      #{description,jdbcType=VARCHAR}, #{loginCount,jdbcType=INTEGER}, #{previousVisit,jdbcType=TIMESTAMP}, 
+      #{lastVisit,jdbcType=TIMESTAMP}, #{delFlag,jdbcType=VARCHAR})
+  </insert>
+
+  <delete id="deleteUserById" >
+      delete from sb_user WHERE id=#{id}
+  </delete>
+  
+  <select id="findUserByUsernameAndPwd" resultMap="BaseResultMap">
+  	select * from sb_user where login_name=#{username} and password=#{password}
+  </select>
+
+  <select id="listUserRoleByUserId" resultType="int">
+    select ur.role_id from user_role ur where ur.user_id=#{id}
+  </select>
+  
+  <select id="listUser" resultMap="BaseResultMap">
+  	select * from sb_user 
+  </select>
+
+  <select id="listUserByPage" resultMap="BaseResultMap" parameterType="com.chw.spb.common.EasyPage">
+  	select * from sb_user
+  	<where>
+      <foreach collection="queryFields" item="field" index="index" separator=" ">
+        <if test="field.value != null and field.value!=''">
+          AND ${field.name} ${field.type} #{field.value}
+        </if>
+      </foreach>
+    </where>
+      ORDER BY ${sort} ${order}
+  </select>
+
+  <select id="findUserByUsername" resultMap="BaseResultMap">
+  	select * from sb_user where login_name=#{username} 
+  </select>
+
+  <select id="findUserByUserId" resultMap="BaseResultMap">
+  	select * from sb_user where id=#{id}
+  </select>
+
+  <insert id="insertSelective" parameterType="com.chw.spb.system.entity.User">
+    insert into sb_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="loginName != null">
+        LOGIN_NAME,
+      </if>
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="password != null">
+        PASSWORD,
+      </if>
+      <if test="salt != null">
+        SALT,
+      </if>
+      <if test="birthday != null">
+        BIRTHDAY,
+      </if>
+      <if test="gender != null">
+        GENDER,
+      </if>
+      <if test="email != null">
+        EMAIL,
+      </if>
+      <if test="phone != null">
+        PHONE,
+      </if>
+      <if test="icon != null">
+        ICON,
+      </if>
+      <if test="createDate != null">
+        CREATE_DATE,
+      </if>
+      <if test="state != null">
+        STATE,
+      </if>
+      <if test="description != null">
+        DESCRIPTION,
+      </if>
+      <if test="loginCount != null">
+        LOGIN_COUNT,
+      </if>
+      <if test="previousVisit != null">
+        PREVIOUS_VISIT,
+      </if>
+      <if test="lastVisit != null">
+        LAST_VISIT,
+      </if>
+      <if test="delFlag != null">
+        DEL_FLAG,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="loginName != null">
+        #{loginName,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null">
+        #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null">
+        #{birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gender != null">
+        #{gender,jdbcType=SMALLINT},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != null">
+        #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=CHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="loginCount != null">
+        #{loginCount,jdbcType=INTEGER},
+      </if>
+      <if test="previousVisit != null">
+        #{previousVisit,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastVisit != null">
+        #{lastVisit,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByUserIdSelective" parameterType="com.chw.spb.system.entity.User">
+    update sb_user
+    <set>
+      <if test="loginName != null">
+        LOGIN_NAME = #{loginName,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        PASSWORD = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null">
+        SALT = #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null">
+        BIRTHDAY = #{birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gender != null">
+        GENDER = #{gender,jdbcType=SMALLINT},
+      </if>
+      <if test="email != null">
+        EMAIL = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        PHONE = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != null">
+        ICON = #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        STATE = #{state,jdbcType=CHAR},
+      </if>
+      <if test="description != null">
+        DESCRIPTION = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="loginCount != null">
+        LOGIN_COUNT = #{loginCount,jdbcType=INTEGER},
+      </if>
+      <if test="previousVisit != null">
+        PREVIOUS_VISIT = #{previousVisit,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastVisit != null">
+        LAST_VISIT = #{lastVisit,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        DEL_FLAG = #{delFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByUserId" parameterType="com.chw.spb.system.entity.User">
+    update sb_user
+    set LOGIN_NAME = #{loginName,jdbcType=VARCHAR},
+    NAME = #{name,jdbcType=VARCHAR},
+    PASSWORD = #{password,jdbcType=VARCHAR},
+    SALT = #{salt,jdbcType=VARCHAR},
+    BIRTHDAY = #{birthday,jdbcType=TIMESTAMP},
+    GENDER = #{gender,jdbcType=SMALLINT},
+    EMAIL = #{email,jdbcType=VARCHAR},
+    PHONE = #{phone,jdbcType=VARCHAR},
+    ICON = #{icon,jdbcType=VARCHAR},
+    CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+    STATE = #{state,jdbcType=CHAR},
+    DESCRIPTION = #{description,jdbcType=VARCHAR},
+    LOGIN_COUNT = #{loginCount,jdbcType=INTEGER},
+    PREVIOUS_VISIT = #{previousVisit,jdbcType=TIMESTAMP},
+    LAST_VISIT = #{lastVisit,jdbcType=TIMESTAMP},
+    DEL_FLAG = #{delFlag,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

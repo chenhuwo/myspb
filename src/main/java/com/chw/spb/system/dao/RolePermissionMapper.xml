@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chw.spb.system.dao.RolePermissionMapper">
+  <resultMap id="BaseResultMap" type="com.chw.spb.system.entity.RolePermission">
+    <result column="ID" jdbcType="INTEGER" property="id" />
+    <result column="ROLE_ID" jdbcType="INTEGER" property="roleId" />
+    <result column="PERMISSION_ID" jdbcType="INTEGER" property="permissionId" />
+  </resultMap>
+  <insert id="insert" parameterType="com.chw.spb.system.entity.RolePermission">
+    insert into role_permission (ID, ROLE_ID, PERMISSION_ID
+      )
+    values (#{id,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}, #{permissionId,jdbcType=INTEGER}
+      )
+  </insert>
+
+  <delete id="deletePermissonByRoleId" parameterType="java.lang.Integer">
+    delete from role_permission where role_id=#{roleId}
+  </delete>
+  <insert id="addPermissionByRoleId" >
+    INSERT INTO role_permission (ROLE_ID, PERMISSION_ID) VALUES
+    <foreach collection="permissionIds"  item="perm" index="index" separator=",">
+      (#{roleId},#{perm})
+    </foreach>
+
+  </insert>
+  <insert id="insertSelective" parameterType="com.chw.spb.system.entity.RolePermission">
+    insert into role_permission
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="roleId != null">
+        ROLE_ID,
+      </if>
+      <if test="permissionId != null">
+        PERMISSION_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="permissionId != null">
+        #{permissionId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>

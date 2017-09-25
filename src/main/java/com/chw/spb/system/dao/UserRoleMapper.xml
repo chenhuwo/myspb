@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chw.spb.system.dao.UserRoleMapper">
+  <resultMap id="BaseResultMap" type="com.chw.spb.system.entity.UserRole">
+    <result column="ID" jdbcType="INTEGER" property="id" />
+    <result column="USER_ID" jdbcType="INTEGER" property="userId" />
+    <result column="ROLE_ID" jdbcType="INTEGER" property="roleId" />
+  </resultMap>
+  <insert id="insert" parameterType="com.chw.spb.system.entity.UserRole">
+    insert into user_role (ID, USER_ID, ROLE_ID
+      )
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="addUserRoleByUserId" >
+    insert into user_role (USER_ID, ROLE_ID)
+    values
+    <foreach collection="list" item="item" index="index" separator="," >
+      (#{userId},#{item})
+    </foreach>
+
+  </insert>
+  <delete id="deleteUserRoleByUserId">
+    delete from user_role where user_id=#{userId}
+  </delete>
+
+  <insert id="insertSelective" parameterType="com.chw.spb.system.entity.UserRole">
+    insert into user_role
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="userId != null">
+        USER_ID,
+      </if>
+      <if test="roleId != null">
+        ROLE_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+</mapper>

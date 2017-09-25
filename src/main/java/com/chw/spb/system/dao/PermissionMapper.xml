@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chw.spb.system.dao.PermissionMapper">
+  <resultMap id="BaseResultMap" type="com.chw.spb.system.entity.Permission">
+    <result column="ID" jdbcType="INTEGER" property="id" />
+    <result column="PID" jdbcType="INTEGER" property="pid" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="TYPE" jdbcType="VARCHAR" property="type" />
+    <result column="SORT" jdbcType="INTEGER" property="sort" />
+    <result column="URL" jdbcType="VARCHAR" property="url" />
+    <result column="PERM_CODE" jdbcType="VARCHAR" property="permCode" />
+    <result column="ICON" jdbcType="VARCHAR" property="icon" />
+    <result column="STATE" jdbcType="VARCHAR" property="state" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.chw.spb.system.entity.Permission">
+    <result column="DESCRIPTION" jdbcType="LONGVARCHAR" property="description" />
+  </resultMap>
+  <sql id="Blob_Column_List">
+    DESCRIPTION
+  </sql>
+  <insert id="insert" parameterType="com.chw.spb.system.entity.Permission">
+    insert into permission (ID, PID, NAME, 
+      TYPE, SORT, URL, PERM_CODE, 
+      ICON, STATE, DESCRIPTION
+      )
+    values (#{id,jdbcType=INTEGER}, #{pid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, #{permCode,jdbcType=VARCHAR}, 
+      #{icon,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, #{description,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  
+  <select id="getCurrentUserPermission" resultMap="BaseResultMap" >
+  		 select p.* from permission p ,role_permission rp,role r,user_role ur,sb_user u where u.id = ur.USER_ID and ur.ROLE_ID =rp.ROLE_ID and  r.id=rp.ROLE_ID and p.ID=rp.PERMISSION_ID
+		and u.id=#{id} and p.type='F' ORDER  BY p.sort
+  </select>
+  <select id="listAll" resultMap="BaseResultMap">
+    select * from permission p
+  </select>
+
+  <insert id="insertSelective" parameterType="com.chw.spb.system.entity.Permission">
+    insert into permission
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="pid != null">
+        PID,
+      </if>
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="type != null">
+        TYPE,
+      </if>
+      <if test="sort != null">
+        SORT,
+      </if>
+      <if test="url != null">
+        URL,
+      </if>
+      <if test="permCode != null">
+        PERM_CODE,
+      </if>
+      <if test="icon != null">
+        ICON,
+      </if>
+      <if test="state != null">
+        STATE,
+      </if>
+      <if test="description != null">
+        DESCRIPTION,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="pid != null">
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="permCode != null">
+        #{permCode,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != null">
+        #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

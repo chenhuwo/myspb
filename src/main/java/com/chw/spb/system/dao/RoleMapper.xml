@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chw.spb.system.dao.RoleMapper">
+  <resultMap id="BaseResultMap" type="com.chw.spb.system.entity.Role">
+    <result column="ID" jdbcType="INTEGER" property="id" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="ROLE_CODE" jdbcType="VARCHAR" property="roleCode" />
+    <result column="SORT" jdbcType="SMALLINT" property="sort" />
+    <result column="DEL_FLAG" jdbcType="VARCHAR" property="delFlag" />
+    <result column="DESCRIPTION" jdbcType="VARCHAR" property="description" />
+  </resultMap>
+
+  <select id="listRole" resultMap="BaseResultMap">
+     select * from role
+  </select>
+
+  <select id="listRoleByPage" resultMap="BaseResultMap" parameterType="com.chw.spb.common.EasyPage">
+    select * from role
+    <where>
+      <foreach collection="queryFields" item="field" index="index" separator=" ">
+        <if test="field.value != null and field.value!=''">
+          AND ${field.name} ${field.type} #{field.value}
+        </if>
+      </foreach>
+    </where>
+    <if test="sort!=null and sort!='' and order != null and order != ''">
+    ORDER BY ${sort} ${order}
+    </if>
+  </select>
+
+  <select id="listPermissionByRoleId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select p.* from permission p ,role_permission rp,role r where r.id=rp.ROLE_ID and p.ID=rp.PERMISSION_ID
+		and r.id=#{id}
+  </select>
+
+  <insert id="insert" parameterType="com.chw.spb.system.entity.Role">
+    insert into role (ID, NAME, ROLE_CODE, 
+      SORT, DEL_FLAG, DESCRIPTION
+      )
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{roleCode,jdbcType=VARCHAR}, 
+      #{sort,jdbcType=SMALLINT}, #{delFlag,jdbcType=VARCHAR}, #{description,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.chw.spb.system.entity.Role">
+    insert into role
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="roleCode != null">
+        ROLE_CODE,
+      </if>
+      <if test="sort != null">
+        SORT,
+      </if>
+      <if test="delFlag != null">
+        DEL_FLAG,
+      </if>
+      <if test="description != null">
+        DESCRIPTION,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="roleCode != null">
+        #{roleCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=SMALLINT},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>
